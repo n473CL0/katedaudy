@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: UnifrakturCook for a stylized, blackletter look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        /* A simple white background */
+        body {
+            background-color: #FFFFFF;
+        }
+        /* Apply the stylized font to the main heading */
+        h1 {
+            font-family: 'kate_daudy_a-bregular_3.1', cursive;
+            color: #000000;
+            line-height: 1.2; /* Adjust line spacing for readability */
+        }
+        .logo-container {
+            /* For positioning the logo and icon */
+            display: flex;
+            align-items: center;
+            gap: 1rem; /* Space between logo and icon */
+        }
+        @font-face {
+            font-family: 'kate_daudy_a-bregular_3.1';
+            src: url('katedaudy-regular-3-webfont.woff2') format('woff2'),
+                url('katedaudy-regular-3-webfont.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* --- Animation Styles --- */
+
+        /* Initially hide the logo/icon container for the fade-in effect */
+        .fade-in-start {
+            opacity: 0;
+        }
+        /* The state after the fade-in effect is complete */
+        .fade-in-end {
+            opacity: 1;
+            transition: opacity 1.5s ease-in-out; /* Controls the fade speed */
+        }
+        /* The blinking animation keyframes */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 
+      Main container using Flexbox. 
+      It centers the content vertically and horizontally.
+      - min-h-screen: Makes the container take up the full height of the screen.
+      - flex, items-center, justify-center: Standard centering.
+      - p-6: Adds padding around the content.
+    -->
+    <main class="min-h-screen flex items-center justify-center p-6">
+
+        <!-- 
+          Content wrapper.
+          - flex-col: Stacks items vertically on mobile (default).
+          - md:flex-row: Switches to a horizontal layout on medium screens and up.
+          - items-center: Keeps items aligned to the center.
+          - justify-between: Pushes items to opposite ends in horizontal layout.
+          - w-full, max-w-4xl: Controls the width of the content area.
+        -->
+        <div class="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between">
+
+            <!-- Main Title -->
+            <!-- text-5xl on mobile, md:text-6xl on medium screens, lg:text-7xl on large screens -->
+            <h1 id="animated-title" class="text-5xl md:text-6xl lg:text-7xl text-center md:text-left mb-8 md:mb-0" data-text="Good things come to<br>those who wait"></h1>
+            <!-- Logo and Icon Container -->
+            <div id="logo-container" class="logo-container fade-in-start">
+                <!-- 
+                  KD Logo Image. 
+                  IMPORTANT: Replace the 'src' value below with the URL of your uploaded KD logo PNG.
+                  To get the URL, you can upload your logo to a service like Imgur, or to a separate GitHub repository and use the raw file link.
+                -->
+                <img 
+                    src="KD.jpeg" 
+                    alt="KD Logo" 
+                    class="w-10 h-10"
+                >
+                
+                <!-- Instagram Icon Link -->
+                <a href="https://www.instagram.com/katedaudy/?hl=en" target="_blank" rel="noopener noreferrer" title="Instagram">
+                    <!-- SVG for the Instagram icon -->
+                    <img 
+                        src="instagram-icon.svg" 
+                        alt="instagram icon" 
+                        class="w-8 h-8"
+                        aria-hidden="true"
+                    >
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Wait until the entire page content is loaded before running the script
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Element References ---
+            const titleElement = document.getElementById('animated-title');
+            const logoContainer = document.getElementById('logo-container');
+            
+            // Get the text from the data-text attribute in the H1 tag
+            const textToType = titleElement.getAttribute('data-text');
+
+            // --- Animation Parameters ---
+            const typingSpeed = 100; // Milliseconds per character
+            let charIndex = 0;
+
+            // --- Blinking Cursor Setup ---
+            const cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
+            titleElement.appendChild(cursor);
+
+            // --- Typing Animation Function ---
+            function typeWriter() {
+                if (charIndex < textToType.length) {
+                    // Check for the <br> tag for line breaks
+                    if (textToType.substring(charIndex, charIndex + 4) === '<br>') {
+                        titleElement.insertBefore(document.createElement('br'), cursor);
+                        charIndex += 4;
+                    } else {
+                        // Insert the next character before the cursor
+                        const char = document.createTextNode(textToType[charIndex]);
+                        titleElement.insertBefore(char, cursor);
+                        charIndex++;
+                    }
+                    // Call the function again after the specified delay
+                    setTimeout(typeWriter, typingSpeed);
+                } else {
+                    // Typing is finished
+                    cursor.style.display = 'none'; // Hide the cursor
+                    fadeInLogo(); // Trigger the fade-in animation
+                }
+            }
+
+            // --- Fade-In Animation Function ---
+            function fadeInLogo() {
+                // Switch the CSS class to trigger the fade-in transition
+                logoContainer.classList.remove('fade-in-start');
+                logoContainer.classList.add('fade-in-end');
+            }
+
+            // --- Start the Animation ---
+            typeWriter();
+        });
+    </script>
+
+</body>
+</html>
